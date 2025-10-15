@@ -1,4 +1,4 @@
-# Dictionnaire en Python
+# Dictionnaire
 - [Premiers pas avec les dictionnaires en Python](#premiers-pas-avec-les-dictionnaires-en-python)
 - [Créer des dictionnaires en Python](#créer-des-dictionnaires-en-python)
   - [Littéraux de dictionnaire](#littéraux-de-dictionnaire)
