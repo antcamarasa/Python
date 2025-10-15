@@ -30,4 +30,83 @@
 - [Explorer les classes existantes similaires aux dictionnaires](#explorer-les-classes-existantes-similaires-aux-dictionnaires)
 - [Créer ses propres classes similaires aux dictionnaires](#créer-ses-propres-classes-similaires-aux-dictionnaires)
 - [Conclusion](#conclusion)
-- [Foire aux questions (FAQ)](#foire-aux-questions-faq)
+
+
+## [Premiers pas avec les dictionnaires en Python](#premiers-pas-avec-les-dictionnaires-en-python)
+Les dictionnaires sont l’un des types de données intégrés les plus importants et utiles de Python.
+Ils offrent une collection mutable de paires clé-valeur, permettant d’accéder et de modifier efficacement les valeurs à l’aide de leurs clés correspondantes.
+
+            config = {
+              "color": "green",
+              "width": 42,
+              "height": 100,
+              "font": "Courier",
+            }
+
+            # Access a value throught its key
+            config["color"]
+            >>> "green"
+
+            #Update a value 
+            config["font"] = "Helvetica"
+            
+            print(config)
+            {
+              'color': 'green',
+              'width': 42,
+              'height': 100,
+              'font': 'Helvetica'
+            }
+
+Un dictionnaire python est une collection de paire "clé-valeurs", ou chaque clé correspond a une valeur. Dans l'exemple:
+- 'color' est une clés
+et,
+- 'green' et la valeur associé a cette clé.
+
+Les dictionnaires sont une partie fondamentale de Python. On les retrouve derrière des concepts essentiels tels que les espaces de noms (namespaces) et les portées (scopes), comme on peut le constater avec les fonctions intégrées globals() et locals() :
+
+
+        >>> globals()
+        {
+          '__name__': '__main__',
+          '__doc__': None,
+          '__package__': None,
+          ...
+        }
+
+La fonction globals() renvoie un dictionnaire contenant des paires clé-valeur qui associent des noms aux objets présents dans votre portée globale actuelle.
+
+Python utilise également des dictionnaires pour gérer l’implémentation interne des classes. Considérez l’exemple de classe suivant :
+
+        >>>   class Number:
+                def __init__(self, value):
+                  self.value = value
+
+        >>>   Number(42).__dict__
+        {value : 42}
+            
+L’attribut spécial .__dict__ est un dictionnaire qui associe les noms des attributs à leurs valeurs correspondantes dans les classes et objets Python. Cette implémentation permet une recherche rapide et efficace des attributs et des méthodes dans le cadre de la programmation orientée objet.
+
+
+Vous pouvez utiliser les dictionnaires pour résoudre de nombreuses tâches de programmation dans votre code Python. Ils sont particulièrement utiles pour traiter des fichiers CSV et JSON, interagir avec des bases de données, charger des fichiers de configuration, et bien plus encore.
+
+Les dictionnaires en python possèdent les carractéristiques suivantes :
+- Mutables : les valeurs d’un dictionnaire peuvent être modifiées directement.
+- Dynamiques : ils peuvent grandir ou rétrécir selon les besoins.
+- Efficaces : ils sont implémentés sous forme de tables de hachage, ce qui permet une recherche rapide des clés.
+- Ordonnés : Depuis 3.7, les dictionnaires conservent l'ordre d'insertion des éléménts.
+
+Les clés d’un dictionnaire sont soumises à quelques restrictions. Elles doivent être :
+- Hashables : cela signifie que vous ne pouvez pas utiliser des objets non hachables, comme les listes, les dict, les set en tant que clé, car ce sont des structures mutables
+- Unique : un dictionnaire ne peut pas contenir de clés en double.
+
+Les types hachables : 
+- int, float, str, bytes
+- tuple (si tous ces élements sont hachables)
+- frozenSet(set immuable)
+- bool (sous-classe de int)
+- instances d'objets personnalisés si leur classe definit/autorise __hash__ et reste immuable
+
+En revanche, les valeurs d’un dictionnaire n’ont pas de restrictions.
+
+Elles peuvent être de n’importe quel type Python, y compris d’autres dictionnaires, ce qui permet de créer des dictionnaires imbriqués (nested dictionaries).
