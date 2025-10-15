@@ -193,5 +193,3 @@
   - Heaps in Python: Introduction to `heapq`  
   - Priority Queues and Scheduling With `heapq`
 
----
-## **Module VI : Search and Sorting algorithm
