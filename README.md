@@ -1,4 +1,4 @@
-# 📘 Table des matières
+# 📘 Computer Science
 
 ## **Module I : Foundations of Computing (Low-Level & Memory)**
 - ### **A. Binary Representation & Number Systems**
