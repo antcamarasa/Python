@@ -361,3 +361,233 @@ Resultat :
 - a et b → les deux premiers arguments normaux
 - *args → tout ce qui reste sans nom
 - **kwargs → tout ce qui reste avec un nom
+
+### 1. Créer des dictionnaires avec les keyword arguments
+
+Si les clés de votre dictionnaire sont des chaînes de caractères qui représentent des identifiants Python valides, vous pouvez les spécifier comme arguments nommés.
+Voici un exemple avec un dictionnaire MLB_teams :
+
+      >>> MLB_teams = dict(
+      ...     Colorado="Rockies",
+      ...     Chicago="White Sox",
+      ...     Boston="Red Sox",
+      ...     Minnesota="Twins",
+      ...     Milwaukee="Brewers",
+      ...     Seattle="Mariners",
+      ... )
+
+      # Output =>
+      {
+        'Colorado': 'Rockies',
+        'Chicago': 'White Sox',
+        'Boston': 'Red Sox',
+        'Minnesota': 'Twins',
+        'Milwaukee': 'Brewers',
+        'Seattle': 'Mariners'
+      }
+
+Voyons pourquoi les clés ne sont pas entourées de guillemets, même si elles deviennent bien des chaînes de caractères dans le dictionnaire final.
+
+Quand tu écris : 
+
+      MLB_teams = dict(
+      Colorado="Rockies",
+      Chicago="White Sox",
+      Boston="Red Sox"
+      )
+
+Python ,e voit pas ça comme des paire clé:valeur, mais comme des arguments nommés pass a la fonction dict().
+
+Autrement dit, c'est exactement comme si on appelais une fonction classique :
+
+      def ma_fonction(Colarado="Rockies", Chicago="White Sox")
+
+Ici les noms Colorado, Chicago... sont des identifiants pythons, pas des chaines.
+Mais lorsque dict() recoit ses arguments, Pythons les convertit automatiquement en clé de type str dans le dictionnaire.
+
+#### Ce qu’il se passe sous le capot
+
+Python fait ceci :
+- Il lit tes arguments nommés (Colorado="Rockies", etc.)
+- Il crée un dictionnaire interne :
+
+      {"Colorado": "Rockies", "Chicago": "White Sox", "Boston": "Red Sox"}
+
+- Il passe ce dict à dict(**kwargs)
+- Le constructeur dict() crée ton vrai dictionnaire à partir de ça.
+
+#### ⚠️ Limitation importante
+
+Cette syntaxe ne marche que si les clés sont des identifiants Python valides :
+- Pas d’espaces ("New York" ❌)
+- Pas de tirets ("Los-Angeles" ❌)
+- Pas de chiffres au début ("2Pac" ❌)
+- Pas de caractères spéciaux ("Café" ❌ si accent non géré)
+
+--- 
+
+### 2. Créer un dictionnaire à partir d’un itérable de paires clé–valeur
+
+Vous pouvez aussi créer un dictionnaire à partir d’un itérable de paires (clé, valeur). Voici comment construire le même dictionnaire MLB_teams de cette manière
+
+    >>> MLB_teams = dict(
+    ...     [
+    ...         ("Colorado", "Rockies"),
+    ...         ("Chicago", "White Sox"),
+    ...         ("Boston", "Red Sox"),
+    ...         ("Minnesota", "Twins"),
+    ...         ("Milwaukee", "Brewers"),
+    ...         ("Seattle", "Mariners"),
+    ...     ]
+    ... )
+
+  Résultat :
+
+      {
+        'Colorado': 'Rockies',
+        'Chicago': 'White Sox',
+        'Boston': 'Red Sox',
+        'Minnesota': 'Twins',
+        'Milwaukee': 'Brewers',
+        'Seattle': 'Mariners'  
+      }
+
+Dans cet exemple, vous construisez le dictionnaire à partir d’une liste de tuples contenant deux éléments :
+- le premier est la clé, le second est la valeur associée.
+
+
+### 3. Combiner zip() et dict()
+
+Une méthode élégante pour créer des dictionnaires à partir de deux séquences consiste à utiliser la fonction intégrée zip(), puis à appeler dict() :
+
+
+          >>> places = [
+          ...     "Colorado",
+          ...     "Chicago",
+          ...     "Boston",
+          ...     "Minnesota",
+          ...     "Milwaukee",
+          ...     "Seattle",
+          ... ]
+
+          >>> teams = [
+          ...     "Rockies",
+          ...     "White Sox",
+          ...     "Red Sox",
+          ...     "Twins",
+          ...     "Brewers",
+          ...     "Mariners",
+          ... ]
+
+          >>> dict(zip(places, teams))
+          {
+          'Colorado': 'Rockies',
+          'Chicago': 'White Sox',
+          'Boston': 'Red Sox',
+          'Minnesota': 'Twins',
+          'Milwaukee': 'Brewers',
+          'Seattle': 'Mariners'
+        }
+
+La fonction zip() prend un ou plusieurs itérables en argument et renvoie des tuples combinant les éléments de chaque itérable.
+
+🧠 Remarque importante :
+Vos données d’origine doivent être ordonnées dans le bon ordre, car zip() associe les éléments position par position. Sinon, vous risquez d’obtenir un dictionnaire qui associe les mauvaises clés aux mauvaises valeurs.
+
+
+### La methode fromkeys() 
+Le type dict possède une méthode de classe appelée .fromkeys(), qui permet de créer un nouveau dictionnaire à partir :
+- d’un itérable de clés,
+- et d’une valeur par défaut.
+
+Sa signature est la suivante :
+
+          dict.fromkeys(iterable, value=None)
+
+          iterable : contient les clés que vous voulez inclure dans le dictionnaire.
+          Même si cet itérable contient des doublons, le dictionnaire final aura des clés uniques (comme toujours).
+
+          value : permet de définir une valeur par défaut pour toutes les clés.
+          Si vous ne précisez rien, la valeur par défaut sera None.
+
+          >>> inventory = dict.fromkeys(["apple", "orange", "banana", "mango"], 0)
+          
+          >>> inventory
+          {'apple': 0, 'orange': 0, 'banana': 0, 'mango': 0}
+
+---
+
+## 🔹 Accéder aux valeurs d’un dictionnaire
+Une fois que vous avez créé un dictionnaire, vous pouvez accéder à son contenu en utilisant ses clés.
+Pour récupérer une valeur à partir d’un dictionnaire, il suffit d’indiquer la clé correspondante entre crochets ([]) après le nom du dictionnaire :
+
+      >>> MLB_teams["Minnesota"]
+      'Twins'
+
+      >>> MLB_teams["Colorado"]
+      'Rockies'
+
+Autrement dit, vous pouvez indexer (subscript) un dictionnaire avec une clé spécifique pour obtenir la valeur associée.
+
+✅ La recherche d’une clé dans un dictionnaire est une opération très efficace, car les dictionnaires en Python sont implémentés sous la forme de tables de hachage (hash tables).
+
+
+
+#### ⚠️ Clé inexistante
+
+Si vous essayez d’accéder à une clé qui n’existe pas dans le dictionnaire,
+
+Python lève une exception :
+
+      >>> MLB_teams["Indianapolis"]
+      Traceback (most recent call last):
+      ...
+      
+      KeyError: 'Indianapolis'
+      
+➡️ Autrement dit, lorsqu’on tente d’accéder à une clé absente, Python déclenche une erreur KeyError.
+
+#### 🔹 Exemple : dictionnaire imbriqué
+
+Supposons maintenant que vous ayez le dictionnaire suivant contenant les données d’une personne :
+
+      >>> person = {
+      ...     "first_name": "John",
+      ...     "last_name": "Doe",
+      ...     "age": 35,
+      ...     "spouse": "Jane",
+      ...     "children": ["Ralph", "Betty", "Bob"],
+      ...     "pets": {"dog": "Frieda", "cat": "Sox"},
+      ... }
+
+Ce dictionnaire contient :
+- une liste comme valeur associée à la clé "children" ;
+- un autre dictionnaire comme valeur associée à la clé "pets".
+
+🔍 Accéder à une liste imbriquée
+
+Pour accéder à un élément d’une liste contenue dans le dictionnaire, vous utilisez d’abord la clé correspondante, puis l’index souhaité :
+      
+      >>> person["children"][0]
+      'Ralph'
+
+      >>> person["children"][2]
+      'Bob'
+
+🐶 Accéder à un dictionnaire imbriqué
+
+Pour accéder à une valeur à l’intérieur d’un dictionnaire imbriqué, vous utilisez la clé du dictionnaire extérieur, puis la clé intérieure :
+
+    >>> person["pets"]["dog"]
+    'Frieda'
+    
+    >>> person["pets"]["cat"]
+    'Sox'
+
+🧠 En résumé
+
+Utiliser une clé pour accéder à une valeur dans un dictionnaire :
+- dictionnaire["clé"]
+- Utiliser clé + index pour accéder à une valeur dans une liste imbriquée.
+- Utiliser clé extérieure + clé intérieure pour accéder à une valeur dans un dictionnaire imbriqué.
+- Le niveau d’imbrication détermine combien de clés ou d’indices il faut enchaîner.
