@@ -1,0 +1,116 @@
+🧠 Comprendre la récursion et la gestion de la profondeur (level) dans un dictionnaire imbriqué
+🎯 Objectif
+
+Afficher chaque clé et son niveau d’imbrication dans un dictionnaire potentiellement imbriqué.
+
+⚙️ 1. Version de base — passage du niveau par valeur
+
+  def search_key_in_dict_nested(d: dict):
+
+    def helper_recursive(d, level):
+        for k, v in d.items():
+            current_level = level
+            if not isinstance(v, Mapping):
+                print(f"Level : {current_level} key : {k}")
+            else:
+                print(f"Level : {current_level} key : {k}")
+                helper_recursive(v, current_level + 1)
+
+    helper_recursive(d, 0)
+
+
+🔍 Compréhension
+
+helper_recursive(v, current_level + 1) passe une nouvelle valeur du niveau à chaque appel.
+
+Chaque appel récursif crée une nouvelle frame (contexte d’exécution).
+
+Le level du parent n’est jamais modifié :
+il reste identique quand on revient de la récursion.
+
+👉 Ici, level + 1 est une simple expression : elle calcule une valeur sans affecter la variable level dans la frame actuelle.
+
+🧩 Schéma de frames
+
+  Frame A: level = 0
+  ├── clé children → appel avec (level + 1 = 1)
+       Frame B: level = 1
+          ├── clé pets → appel avec (level + 1 = 2)
+               Frame C: level = 2
+          ← Retour → level du parent (1) inchangé
+
+✅ Propre, simple, sans décrémentation manuelle.
+
+⚙️ 2. Version avec incrémentation / décrémentation manuelle
+
+  def search_key_in_dict_nested_second_iteration(d: dict):
+
+    def helper_recursive(d, level):
+        for k, v in d.items():
+            if not isinstance(v, Mapping):
+                print(f"Level : {level} key : {k}")
+            else:
+                level += 1
+                print(f"Level : {level} key : {k}")
+                helper_recursive(v, level)
+                level -= 1
+
+    helper_recursive(d, 0)
+
+🔍 Compréhension
+level += 1 modifie la variable level dans la frame courante.
+
+Il faut donc la décrémenter (level -= 1) après le retour de la récursion pour revenir à la profondeur d’origine.
+
+C’est une gestion manuelle de la montée/descente, utile quand on veut contrôler la profondeur directement dans la même frame.
+
+🧩 Schéma de frames et du level
+
+Frame A: level = 0
+  ↑ level += 1 → 1
+  ├── Appel récursif (Frame B: level = 1)
+  ↓ level -= 1 → revient à 0
+
+  ⚠️ Si on oublie le level -= 1, le niveau reste “bloqué” à 1, donc les affichages suivants seraient faux.
+Cette version simule manuellement la descente et la remontée dans la pile.
+
+✅ Utile pour comprendre comment la pile redescend, mais plus fragile.
+
+
+⚙️ 3. Version pure et sûre — passage d’un level calculé
+
+    def search_key_in_dict_nested_third_iteration(d: dict):
+
+    def helper_recursive(d, level):
+        for k, v in d.items():
+            if not isinstance(v, Mapping):
+                print(f"Level : {level} key : {k}")
+            else:
+                print(f"Level : {level} key : {k}")
+                helper_recursive(v, level + 1)
+
+    helper_recursive(d, 0)
+
+
+🔍 Compréhension
+
+level + 1 crée une nouvelle valeur temporaire (par exemple 2), passée à l’appel suivant.
+
+Le parent ne modifie rien dans sa propre frame.
+
+Le fils reçoit sa propre copie de level, indépendante de celle du parent.
+
+Quand le fils termine, on revient au parent avec son level inchangé.
+
+🧩 Schéma de frames :
+
+Frame Parent: level = 1
+   helper_recursive(v, level + 1) → appel avec valeur 2
+      Frame Enfant: level = 2
+         ...
+   ← retour → Frame Parent toujours level = 1
+
+✅ Le plus propre :
+pas de mutation,
+pas de décrémentation à gérer,
+chaque niveau est isolé et cohérent.
