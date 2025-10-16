@@ -277,5 +277,87 @@ Ici, la valeur "a" est utilisée plusieurs fois, ce qui est parfaitement autoris
 
 ---
 
-## The dict() Constructor
+## Le constructeur dict()
+Vous pouvez également construire des dictionnaires à l’aide du constructeur dict().
+Les arguments de dict() peuvent être :
+- Une série d’arguments nommés (keyword arguments) ;
+- un autre dictionnaire (ou mappage) ;
+- ou encore un itérable de paires clé–valeur.
 
+Voici les différentes signatures possibles du constructeur :
+
+    dict()
+    dict(**kwargs)
+    dict(mapping, **kwargs)
+    dict(iterable, **kwargs)
+
+Si on appel le constructeur dict(), sans argument, on obtient un dictionnaire vide :
+
+      >>> dict()
+          {}
+Dans la plupart des cas, on utilise simplement une paire d’accolades vides {} pour créer un dictionnaire vide.
+
+Cependant, dans certaines situations, utiliser le constructeur dict() peut rendre le code plus explicite.
+
+#### Qu'est ce que **kwargs ? 
+
+**kwargs sert à récupérer des arguments nommés (comme clé=valeur) dans une fonction.
+
+kwargs signifie "keyword arguments", c’est-à-dire arguments nommés.
+- ** indique que la fonction peut recevoir un nombre variable d'arguments nommés(sous forme de dictionnaire)
+- le mot kwargs est une convention : On pourrait l'appeler (**params, par exemple) mais la norme est **kwargs
+
+      def test(**kwargs):
+        print(type(kwargs))
+        print(kwargs)
+
+      test(a=1, b=2)
+
+      >>> <class 'dict'>
+      >>> {'a': 1, 'b': 2}
+
+🔹 Ici, kwargs n’est pas un dictionnaire que tu passes toi-même, mais Python le transforme en dictionnaire pour toi à l’intérieur de la fonction. C’est pour ça qu’on dit que kwargs se comporte comme un dictionnaire.
+
+#### 🧱 4. Lien avec le constructeur dict(**kwargs)
+
+Quand tu écris :
+
+      d = dict(nom="Alice", age=30)
+👉 Python passe en interne les arguments nommés sous forme de **kwargs à la fonction dict(), et dict() les transforme en un vrai dictionnaire :
+
+      >>> {'nom': 'Alice', 'age': 30}
+
+A la différence avec *args, pour les arguments positionnels.
+
+#### 🧩 1. Signification de *args
+- *args veut dire "arguments" (sans mots-clés).
+- * indique que la fonction peut recevoir un nombre variable d’arguments positionnels,
+- et les regroupe dans un tuple (un ensemble ordonné et immuable).
+
+      def addition(*args):
+        print(args)
+
+      addition(1, 2, 3)
+
+      >>> (1, 2, 3)
+
+#### Exemple combine **kwargs et *args
+
+    def demo(a, b, *args, **kwargs):
+      print("a =", a)
+      print("b =", b)
+      print("args =", args)
+      print("kwargs =", kwargs)
+
+    demo(10, 20, 30, 40, 50, nom="Alice", age=30)
+
+Resultat : 
+
+      a = 10
+      b = 20
+      args = (30, 40, 50)
+      kwargs = {'nom': 'Alice', 'age': 30}
+
+- a et b → les deux premiers arguments normaux
+- *args → tout ce qui reste sans nom
+- **kwargs → tout ce qui reste avec un nom
